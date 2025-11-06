@@ -16,7 +16,7 @@ jobs:
     docker:
       # Use a base image that has Node.js and other common tools.
       # Change this if your project has different requirements (e.g., python, java).
-      - image: cimg/node:18.17
+      - image: circleci/node:latest
     
     steps:
       # Step 1: Get the code from GitHub
@@ -24,9 +24,9 @@ jobs:
 
       # --- (Optional) Add your build and test steps here ---
       # For example, for a Node.js project:
-      # - run:
-      #     name: Install Dependencies
-      #     command: npm install
+    - run:
+       name: Install Dependencies
+ command: npm install
       # - run:
       #     name: Run Tests
       #     command: npm test
@@ -49,3 +49,4 @@ workflows:
           # SONAR_TOKEN environment variable securely.
           context:
             - sonarcloud.io
+
