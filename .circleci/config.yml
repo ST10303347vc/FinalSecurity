@@ -1,0 +1,51 @@
+# This is a complete CircleCI configuration file for running a SonarCloud scan.
+# It assumes you have a Node.js project, but the sonar-scan job is language-agnostic.
+# You can add your own build/test steps before the 'sonarcloud/scan' command.
+
+version: 2.1
+
+# 1. Orbs: Import the official SonarCloud orb.
+# Orbs are reusable packages of CircleCI configuration.
+orbs:
+  sonarcloud: sonarsource/sonarcloud@1.2.0
+
+# 2. Jobs: Define the tasks to be run.
+jobs:
+  # This job checks out the code, (optionally) builds/tests, and scans.
+  build_and_scan:
+    docker:
+      # Use a base image that has Node.js and other common tools.
+      # Change this if your project has different requirements (e.g., python, java).
+      - image: cimg/node:18.17
+    
+    steps:
+      # Step 1: Get the code from GitHub
+      - checkout
+
+      # --- (Optional) Add your build and test steps here ---
+      # For example, for a Node.js project:
+      # - run:
+      #     name: Install Dependencies
+      #     command: npm install
+      # - run:
+      #     name: Run Tests
+      #     command: npm test
+      # ----------------------------------------------------
+
+      # Step 2: Run the SonarCloud scan
+      # This command uses the SonarCloud orb.
+      # It will automatically find the SONAR_TOKEN and SONAR_ORGANIZATION
+      # variables you set in the CircleCI project settings.
+      - sonarcloud/scan
+
+# 3. Workflows: Orchestrate the jobs.
+workflows:
+  # This workflow is named 'main'
+  main:
+    jobs:
+      # Run the 'build_and_scan' job on every push to the repository.
+      - build_and_scan:
+          # This 'context' is required by the orb to access the
+          # SONAR_TOKEN environment variable securely.
+          context:
+            - sonarcloud.io
