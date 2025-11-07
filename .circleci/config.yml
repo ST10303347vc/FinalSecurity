@@ -41,3 +41,9 @@ workflows:
           # the SONAR_TOKEN environment variable securely.
           context:
             - sonarcloud.io
+          
+          # --- This filter stops the job from running on 'main' ---
+          filters:
+            branches:
+              ignore:
+                - main
